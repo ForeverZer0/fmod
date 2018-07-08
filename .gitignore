@@ -1,0 +1,16 @@
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+/.idea
+
+/**/*.mp3
+/**/*.dll
+/lib/test.rb
+
+# rspec failure tracking
+.rspec_status
