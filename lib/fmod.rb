@@ -10,7 +10,17 @@ module FMOD
   # Null-pointer (address of 0)
   NULL = Pointer.new(0).freeze
 
+  ##
+  # Version number of the wave format codec.
+  #
+  # Use this for binary compatibility and for future expansion.
   WAVE_FORMAT_VERSION = 3
+
+  ##
+  # Array of extensions for supported formats.
+  #
+  # Additional formats may be supported, or added via plug-ins.
+  SUPPORTED_EXTENSIONS = %w(.aiff .asf .asx .dls .flac .fsb .it .m3u .midi .mod .mp2 .mp3 .ogg .pls .s3m .vag .wav .wax .wma .xm .xma)
 
   ##
   # The maximum number of channels per frame of audio supported by audio files,
@@ -436,7 +446,6 @@ module FMOD
     library = File.join(directory, library)
     puts library
     lib = Fiddle.dlopen(File.expand_path(library))
-
     import_symbols(lib)
   end
 

@@ -2,6 +2,7 @@
 
 require "bundler/setup"
 require "fmod"
+require 'irb'
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
@@ -10,5 +11,18 @@ require "fmod"
 # require "pry"
 # Pry.start
 
-require "irb"
-IRB.start(__FILE__)
+if $0 == __FILE__
+  include FMOD
+
+  FMOD.load_library
+
+  mp3 = Dir.glob("#{Dir.home}/Music/**/*.mp3").sample
+  unless mp3.nil?
+    puts("Now playing \"#{File.basename(mp3)}...\"")
+    $system = System.create
+    $sound = $system.create_stream(mp3)
+    $channel = $system.play_sound($sound)
+  end
+
+  IRB.start(__FILE__)
+end

@@ -1,8 +1,35 @@
 # FMOD
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/fmod`. To experiment with that code, run `bin/console` for an interactive prompt.
 
-TODO: Delete this and the text above, and describe your gem
+
+A full-featured (complete Ruby wrapper) of the ultra-powerful FMOD Low-Level API. Uses the built-in Fiddle library (Ruby 2.0+), and has no external gem dependencies, all that is needed is the native FMOD platform-specific native FMOD libraries.
+
+FMOD supports a host of audio formats including:
+   * Audio Interchange File Format (.aiff )
+   * Advanced Systems Format (.asf)
+   * Advanced Stream Redirector (.asx)
+   * Downloadable Sound (.dls)
+   * Free Lossless Audio Codec (.flac)
+   * FMOD Sound Bank (.fsb)
+   * Impulse Tracker (.it)
+   * MPEG Audio Layer 3 URL (.m3u)
+   * Musical Instrument Digital Interface (.mid, .midi)
+   * Module Format (.mod)
+   * MPEG Audio Layer 2 (.mp2)
+   * MPEG Audio Layer 3 (.mp3)
+   * OGG Vorbis (.ogg)
+   * Playlist (.pls)
+   * ScreamTracker 3 Module (.s3m )
+   * PS2/PSP Format (.vag )
+   * Waveform Audio File Forma (.wav )
+   * Windows Media Audio Redirector (.wax )
+   * Windows Media Audio (.wma )
+   * Extended Module (.xm )
+   * Windows Media Audio (Xbox 360) (.xma)
+   
+FMOD is most widely known for its application in video games for sound effects, as it fully supports 3D sound, and can be found in all popular video game consoles (Sony, Microsoft, and Nintendo), as well as a large number of popular PC and mobile games. Built-in is a large collection of audio effects that can be applied to a sound, including various equalizers, advanced reverb environments, pitch-shifting, frequency, flange, chorus, and many, many more. 
+
+The wrapper supports callbacks for various events, such as sync-points in wave files, sound playback ending (either by user or end of data), and various other scenarios.  It additionally supports access to raw PCM data directly from the sound card, for creating visualizations or examining the sound in real-time.
 
 ## Installation
 
@@ -19,25 +46,40 @@ And then execute:
 Or install it yourself as:
 
     $ gem install fmod
+    
+The dependent binaries will be loaded automatically on Windows and Mac without further action, and are included within the gem. Linux user will need to locate the `./ext` directory within the gem file and extract `libfmod.zip` into the `./ext` directory. Due to symbolic linking, this process needs done on the host machine, and will hopefully be automated in future releases.
 
 ## Usage
 
-TODO: Write usage instructions here
+Including in the `/extras` folder is the compiled help documentation for the actual FMOD library, which can be helpful for understanding how the API works if you are unfamiliar.
 
-## Development
+Those who are familiar with FMOD will find the structure and syntax familiar, though performed in the object-oriented "Ruby" way.  All base core FMOD data types have been created as classes, and mostly share the same names with their C counterpart though in Ruby "snake_case" style as opposed to "UpperCamelCase".  Being object-oriented each class is wrapped around using the functions that relate to it, and doesn't require the use of passing pointers or the object to the methods.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+So creating and working with objects has been simplied..
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```ruby
+require 'fmod'
+
+FMOD.load_library
+
+system = FMOD::System.create
+sound = system.create_sound("./myFile.mp3")
+sound.play  
+``` 
+
+Each get/set method in the FMOD API has been converted to an "attribute" that can be accessed in the Ruby way. So instead of`FMOD_Channel_GetVolume` and `FMOD_Channel_SetVolume`, it is simply `channel.volume` and `channel.volume = value`. 
+
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/fmod. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on [GitHub](https://github.com/ForeverZer0/fmod). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
+The FMOD library is under a free license for non-commercial use, and a proprietary license otherwise. See the [FMOD License Page](https://www.fmod.com/licensing) for details on pricing if you plan to use this commercially.
+
 ## Code of Conduct
 
-Everyone interacting in the Fmod project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/fmod/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the FMOD project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/ForeverZer0/fmod/blob/master/CODE_OF_CONDUCT.md).
