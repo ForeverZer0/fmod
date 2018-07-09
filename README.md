@@ -2,14 +2,14 @@
 
 
 
-A full-featured (complete Ruby wrapper) of the ultra-powerful FMOD Low-Level API. Uses the built-in Fiddle library (Ruby 2.0+), and has no external gem dependencies, all that is needed is the native FMOD platform-specific native FMOD libraries.
+A full-featured (*complete* Ruby wrapper) of the ultra-powerful FMOD Low-Level API. Uses the built-in Fiddle library (Ruby 2.0+), and has no external gem dependencies, all that is needed is the native FMOD platform-specific native FMOD libraries.
 
-FMOD supports a host of audio formats including:
+Supports a host of audio formats including:
    * Audio Interchange File Format (.aiff )
    * Advanced Systems Format (.asf)
    * Advanced Stream Redirector (.asx)
    * Downloadable Sound (.dls)
-   * Free Lossless Audio Codec (.flac)
+   * Free Loss-less Audio Codec (.flac)
    * FMOD Sound Bank (.fsb)
    * Impulse Tracker (.it)
    * MPEG Audio Layer 3 URL (.m3u)
@@ -69,6 +69,17 @@ sound.play
 
 Each get/set method in the FMOD API has been converted to an "attribute" that can be accessed in the Ruby way. So instead of`FMOD_Channel_GetVolume` and `FMOD_Channel_SetVolume`, it is simply `channel.volume` and `channel.volume = value`. 
 
+## Future Releases
+
+As of the first release, only slightly better than 50% of documentation is complete. The scripts are highly technical, and good documentation takes time, but it is actively being updated, and will be completed at the highest priority level. If you are using version `1.0.0`, you will have to rely more heavily upon the included FMOD Low-Level API Reference that is included in the `./extras` folder.
+
+There is still yet to be a few areas that need completed, and are in active development. Included are the following known issues:
+   * FMOD plugin support (including 3rd party codecs)
+   * Loading custom sound formats (related to plugin support)
+   * Custom file-system support to piggyback and monitor FMOD's read/write callbacks
+   * Creation of custom effects (Digital Sound Processors) (also related to plugins)
+   
+None of these incomplete areas will have any effect on the existing code-base, and existing code will be unaffected by their implementation in future versions.
 
 ## Contributing
 

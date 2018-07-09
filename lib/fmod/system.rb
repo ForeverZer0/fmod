@@ -1166,8 +1166,8 @@ module FMOD
     # Retrieves a handle to a channel by ID.
     #
     # @param id [Integer] Index in the FMOD channel pool. Specify a channel
-    #   number from 0 to the maximum number of channels specified in {#create}
-    #   minus 1.
+    #   number from 0 to the maximum number of channels specified in
+    #   {System.create} minus 1.
     #
     # @return [Channel] the requested channel.
     def channel(id)

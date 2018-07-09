@@ -15,7 +15,7 @@ module FMOD
     end
 
     def subgroup(index)
-      FMOD.check_range(index, 0, subgroup_count - 1)
+      FMOD.valid_range?(index, 0, subgroup_count - 1)
       FMOD.invoke(:ChannelGroup_GetGroup, self, index, group = int_ptr)
       ChannelGroup.new(group)
     end
@@ -26,7 +26,7 @@ module FMOD
     end
 
     def [](index)
-      FMOD.check_range(index, 0, channel_count - 1)
+      FMOD.valid_range?(index, 0, channel_count - 1)
       FMOD.invoke(:ChannelGroup_GetChannel, self, index, channel = int_ptr)
       Channel.new(channel)
     end

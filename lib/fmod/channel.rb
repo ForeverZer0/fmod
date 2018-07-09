@@ -29,7 +29,7 @@ module FMOD
     # When more channels than available are played the virtual channel system
     # will choose existing channels to steal. Lower priority sounds will always
     # be stolen before higher priority sounds. For channels of equal priority,
-    # that with the quietest {ChannelControl:.audibility} value will be stolen.
+    # that with the quietest {ChannelControl.audibility} value will be stolen.
     # * *Minimum:* 0
     # * *Maximum:* 256
     # * *Default:* 128

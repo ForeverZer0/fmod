@@ -35,7 +35,7 @@ module FMOD
     end
 
     def [](index)
-      FMOD.check_range(0, 0, count - 1)
+      FMOD.valid_range?(0, 0, count - 1)
       FMOD.invoke(:SoundGroup_GetSound, self, index, sound = int_ptr)
       Sound.new(sound)
     end

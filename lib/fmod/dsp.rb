@@ -248,7 +248,7 @@ module FMOD
     end
 
     def param_info(index)
-      return nil unless FMOD.check_range(index, 0, parameter_count, false)
+      return nil unless FMOD.valid_range?(index, 0, parameter_count, false)
       FMOD.invoke(:DSP_GetParameterInfo, self, index, info = int_ptr)
       ParameterInfo.new(info.unpack1('J'))
     end
@@ -352,7 +352,7 @@ module FMOD
     end
 
     def [](index)
-      return nil unless FMOD.check_range(index, 0, parameter_count, false)
+      return nil unless FMOD.valid_range?(index, 0, parameter_count, false)
       case param_info(index).type
       when ParameterType::FLOAT then get_float(index)
       when ParameterType::INT then get_integer(index)
@@ -363,28 +363,28 @@ module FMOD
     end
 
     def get_float(index)
-      return nil unless FMOD.check_range(index, 0, parameter_count, false)
+      return nil unless FMOD.valid_range?(index, 0, parameter_count, false)
       buffer = "\0" * SIZEOF_FLOAT
       FMOD.invoke(:DSP_GetParameterFloat, self, index, buffer, nil, 0)
       buffer.unpack1('f')
     end
 
     def get_integer(index)
-      return nil unless FMOD.check_range(index, 0, parameter_count, false)
+      return nil unless FMOD.valid_range?(index, 0, parameter_count, false)
       buffer = "\0" * SIZEOF_INT
       FMOD.invoke(:DSP_GetParameterInt, self, index, buffer, nil, 0)
       buffer.unpack1('l')
     end
 
     def get_bool(index)
-      return nil unless FMOD.check_range(index, 0, parameter_count, false)
+      return nil unless FMOD.valid_range?(index, 0, parameter_count, false)
       buffer = "\0" * SIZEOF_INT
       FMOD.invoke(:DSP_GetParameterBool, self, index, buffer, nil, 0)
       buffer.unpack1('l') != 0
     end
 
     def get_data(index)
-      return nil unless FMOD.check_range(index, 0, parameter_count, false)
+      return nil unless FMOD.valid_range?(index, 0, parameter_count, false)
       pointer = int_ptr
       size = "\0" * SIZEOF_INT
       FMOD.invoke(:DSP_GetParameterData, self, index, pointer, size, nil, 0)
@@ -392,7 +392,7 @@ module FMOD
     end
 
     def []=(index, value)
-      return unless FMOD.check_range(index, 0, parameter_count, false)
+      return unless FMOD.valid_range?(index, 0, parameter_count, false)
       case value
       when Float then set_float(index, value)
       when Integer then set_integer(index, value)
@@ -403,25 +403,25 @@ module FMOD
     end
 
     def set_float(index, value)
-      return unless FMOD.check_range(index, 0, parameter_count, false)
+      return unless FMOD.valid_range?(index, 0, parameter_count, false)
       FMOD.invoke(:DSP_SetParameterFloat, self, index, value)
       self
     end
 
     def set_integer(index, value)
-      return unless FMOD.check_range(index, 0, parameter_count, false)
+      return unless FMOD.valid_range?(index, 0, parameter_count, false)
       FMOD.invoke(:DSP_SetParameterInt, self, index, value)
       self
     end
 
     def set_bool(index, value)
-      return unless FMOD.check_range(index, 0, parameter_count, false)
+      return unless FMOD.valid_range?(index, 0, parameter_count, false)
       FMOD.invoke(:DSP_SetParameterBool, self, index, value.to_i)
       self
     end
 
     def set_data(index, value)
-      return unless FMOD.check_range(index, 0, parameter_count, false)
+      return unless FMOD.valid_range?(index, 0, parameter_count, false)
       unless FMOD.type?(value, String, false)
         FMOD.type?(value, Pointer)
       end

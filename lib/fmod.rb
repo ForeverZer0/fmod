@@ -1,5 +1,6 @@
 
 require 'fiddle'
+require 'fiddle/import'
 require 'rbconfig'
 
 module FMOD
@@ -49,9 +50,9 @@ module FMOD
 
   require_relative 'fmod/version.rb'
   require_relative 'fmod/core'
-  require_relative 'fmod/error.rb'
-  require_relative 'fmod/handle.rb'
-  require_relative 'fmod/channel_control.rb'
+  require_relative 'fmod/error'
+  require_relative 'fmod/handle'
+  require_relative 'fmod/channel_control'
   require_relative 'fmod/channel.rb'
   require_relative 'fmod/channel_group.rb'
   require_relative 'fmod/dsp.rb'
@@ -424,31 +425,62 @@ module FMOD
     System_Update: [TYPE_VOIDP]
   }
 
+  ##
+  # Invokes the specified native function.
+  #
+  # @param function [Symbol] Symbol name of an FMOD function, without the the
+  #   leading "FMOD_" prefix.
+  # @raise [Error] if the result code returned by FMOD is not {Result::OK}.
+  # @return [void]
+  # @see invoke_protect
   def self.invoke(function, *args)
     result = @functions[function].call(*args)
     raise Error, result unless result.zero?
   end
 
+  ##
+  # Invokes the specified native function.
+  #
+  # The same as {FMOD.invoke}, but returns the result code instead of raising an
+  #   exception.
+  #
+  # @param function [Symbol] Symbol name of an FMOD function, without the the
+  #   leading "FMOD_" prefix.
+  # @return [Integer] the result code.
+  # @see Result
   def self.invoke_protect(function, *args)
     @functions[function].call(*args)
   end
 
+  ##
+  # Loads the native FMOD library.
+  #
+  # @note This must be called before _ANY_ other function is called.
+  #
+  # @param library [String] The name of the library to load. If omitted, the
+  #   default platform-specific library name will be used.
+  # @param directory [String] The directory where the library will be loaded
+  #   from. By default this will be the "./ext" folder relative to the gem
+  #   installation folder.
+  #
+  # @return [void]
   def self.load_library(library = nil, directory = nil)
     if library.nil?
       library =  case platform
       when :WINDOWS then SIZEOF_INTPTR_T == 4 ? 'fmod.dll' : 'fmod64.dll'
       when :MACOSX then 'libfmod.dylib'
       when :LINUX then 'libfmod.so'
-      else 'fmod'  # Will probably fail, but last ditch effort
+      else 'fmod'  # Will probably fail...
       end
     end
-    directory ||= File.join(File.dirname(__FILE__), '../ext')
+    directory ||= File.expand_path('../ext')
     library = File.join(directory, library)
-    puts library
     lib = Fiddle.dlopen(File.expand_path(library))
     import_symbols(lib)
   end
 
+  # @return [Symbol] a symbol representing the operating system. Will be either
+  #   *:WINDOWS*, *:MACOSX*, or *:LINUX*.
   def self.platform
     @platform ||= case RbConfig::CONFIG['host_os']
     when /mswin|msys|mingw|cygwin/ then :WINDOWS
@@ -458,6 +490,12 @@ module FMOD
     end
   end
 
+  ##
+  # Imports the FMOD functions from the loaded library.
+  #
+  # @note This function is called automatically, not to be called by the user.
+  #
+  # @return [void]
   def self.import_symbols(library)
     @functions = {}
     @function_signatures.each_pair do |sym, signature|
@@ -471,18 +509,50 @@ module FMOD
     const_set(:ABI, @functions.values.sample.abi)
   end
 
+  ##
+  # Checks that the object is of the given type, optionally raising an exception
+  # if it is not.
+  #
+  # @param object [Object] The object to check.
+  # @param type [Class] The class to ensure it either is or derives from.
+  # @param exception [Boolean] Flag indicating if an exception should be raised
+  #   in the event the object is not the correct type.
+  # @return [Boolean] +true+ if object is of the specified type, otherwise
+  #   *false*.
+  # @raise [TypeError] when the type does not match and the exception parameter
+  #   is +true+.
   def self.type?(object, type, exception = true)
     return true if object.is_a?(type)
     return false unless exception
     raise TypeError, "#{object} is not a #{type}."
   end
 
-  def self.check_range(index, min, max, exception = true)
+  ##
+  # Checks whether the specified index falls within the given range, optionally
+  #   raises an exception if it does not.
+  #
+  # @param index [Integer] The value to check.
+  # @param min [Integer] The minimum valid value.
+  # @param max [Integer] The maximum valid value.
+  # @param exception [Boolean] Flag indicating if an exception should be raised
+  #   in the event the value is not within the specified range.
+  # @return [Boolean] +true+ if object is within specified range, otherwise
+  #   *false*.
+  # @raise [RangeError] when the value is out of range and the exception
+  #   parameter is +true+.
+  def self.valid_range?(index, min, max, exception = true)
     return true if index.between?(min, max)
     return false unless exception
-    raise RangeError, 'Value outside of valid range.'
+    raise RangeError, "#{index} outside of valid range (#{min}..#{max})."
   end
 
+  ##
+  # Converts an integer value to a version string representation.
+  # @param version [Integer] The version is a 32bit hexadecimal value formatted
+  #   as 16:8:8, with the upper 16 bits being the major version, the middle
+  #   8bits being the minor version and the bottom 8 bits being the development
+  #   version. For example a value of 00040106h is equal to 4.01.06.
+  # @return [String] the version string.
   def self.uint2version(version)
     version = version.unpack1('L') if version.is_a?(String)
     vs = "%08X" % version
