@@ -1,5 +1,6 @@
 module FMOD
   module Core
+
     ##
     # These definitions describe the type of song being played.
     module SoundType

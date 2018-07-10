@@ -1,32 +1,32 @@
 # FMOD
 
-[![Gem Version](https://badge.fury.io/rb/fmod.svg)](https://badge.fury.io/rb/fmod) ![Documentation](https://img.shields.io/badge/Documentation-52%25-orange.svg)
+[![Gem Version](https://badge.fury.io/rb/fmod.svg)](https://badge.fury.io/rb/fmod) ![Documentation](https://img.shields.io/badge/Documentation-71%25-orange.svg)
 
 
 A full-featured (*complete* Ruby wrapper) of the ultra-powerful FMOD Low-Level API. Uses the built-in Fiddle library (Ruby 2.0+), and has no external gem dependencies, all that is needed is the native FMOD platform-specific native FMOD libraries.
 
 Supports a host of audio formats including:
-   * Audio Interchange File Format (.aiff )
-   * Advanced Systems Format (.asf)
-   * Advanced Stream Redirector (.asx)
-   * Downloadable Sound (.dls)
-   * Free Loss-less Audio Codec (.flac)
-   * FMOD Sound Bank (.fsb)
-   * Impulse Tracker (.it)
-   * MPEG Audio Layer 3 URL (.m3u)
-   * Musical Instrument Digital Interface (.mid, .midi)
-   * Module Format (.mod)
-   * MPEG Audio Layer 2 (.mp2)
-   * MPEG Audio Layer 3 (.mp3)
-   * OGG Vorbis (.ogg)
-   * Playlist (.pls)
-   * ScreamTracker 3 Module (.s3m )
-   * PS2/PSP Format (.vag )
-   * Waveform Audio File Forma (.wav )
-   * Windows Media Audio Redirector (.wax )
-   * Windows Media Audio (.wma )
-   * Extended Module (.xm )
-   * Windows Media Audio (Xbox 360) (.xma)
+* Audio Interchange File Format (.aiff )
+* Advanced Systems Format (.asf)
+* Advanced Stream Redirector (.asx)
+* Downloadable Sound (.dls)
+* Free Loss-less Audio Codec (.flac)
+* FMOD Sound Bank (.fsb)
+* Impulse Tracker (.it)
+* MPEG Audio Layer 3 URL (.m3u)
+* Musical Instrument Digital Interface (.mid, .midi)
+* Module Format (.mod)
+* MPEG Audio Layer 2 (.mp2)
+* MPEG Audio Layer 3 (.mp3)
+* OGG Vorbis (.ogg)
+* Playlist (.pls)
+* ScreamTracker 3 Module (.s3m )
+* PS2/PSP Format (.vag )
+* Waveform Audio File Forma (.wav )
+* Windows Media Audio Redirector (.wax )
+* Windows Media Audio (.wma )
+* Extended Module (.xm )
+* Windows Media Audio (Xbox 360) (.xma)
    
 FMOD is most widely known for its application in video games for sound effects, as it fully supports 3D sound, and can be found in all popular video game consoles (Sony, Microsoft, and Nintendo), as well as a large number of popular PC and mobile games. Built-in is a large collection of audio effects that can be applied to a sound, including various equalizers, advanced reverb environments, pitch-shifting, frequency, flange, chorus, and many, many more. 
 
@@ -72,7 +72,7 @@ Each get/set method in the FMOD API has been converted to an "attribute" that ca
 
 ## Future Releases
 
-As of the first release, only slightly better than 50% of documentation is complete. The scripts are highly technical, and good documentation takes time, but it is actively being updated, and will be completed at the highest priority level. If you are using version `1.0.0`, you will have to rely more heavily upon the included FMOD Low-Level API Reference that is included in the `./extras` folder.
+As of the current release, only slightly better than 71% of documentation is complete. The scripts are highly technical, and good documentation takes time, but it is actively being updated, and will be completed at the highest priority level. If you are using version `1.0.0`, you will have to rely more heavily upon the included FMOD Low-Level API Reference that is included in the `./extras` folder.
 
 There is still yet to be a few areas that need completed, and are in active development. Included are the following known issues:
    * FMOD plugin support (including 3rd party codecs)

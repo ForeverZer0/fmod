@@ -3,6 +3,9 @@ require 'fiddle'
 require 'fiddle/import'
 require 'rbconfig'
 
+##
+# Top-level namespace containing the entirety of the FMOD API.
+# @author Eric "ForeverZer0" Freed
 module FMOD
 
   include Fiddle

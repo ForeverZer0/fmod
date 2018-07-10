@@ -8,6 +8,9 @@
 * Bug Fixes
     * Fixed getting Reverb from System object would cause segmentation fault
 
+* Documentation
+    * Completed for Channel, ChannelGroup, and ChannelControl
+
 * Misc.
     * Updated gem description (poor formatting)
     * Added templates for pull-requests, bugs, etc.

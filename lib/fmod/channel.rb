@@ -1,5 +1,8 @@
 
 module FMOD
+
+  ##
+  # Represents a sound-card channel and a interface to sound playback.
   class Channel < ChannelControl
 
     ##

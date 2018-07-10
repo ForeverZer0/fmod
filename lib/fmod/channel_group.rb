@@ -1,7 +1,8 @@
 
 module FMOD
 
-
+  # Represents a logical grouping of {Channel} and/or {ChannelGroup} objects
+  # that can be manipulated as one.
   class ChannelGroup < ChannelControl
 
     include Fiddle
