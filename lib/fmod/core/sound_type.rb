@@ -4,6 +4,7 @@ module FMOD
     ##
     # These definitions describe the type of song being played.
     module SoundType
+
       ##
       # 3rd party / unknown plugin format.
       UNKNOWN = 0

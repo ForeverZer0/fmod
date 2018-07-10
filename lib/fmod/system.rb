@@ -877,41 +877,10 @@ module FMOD
 
     # @!endgroup
 
+    # @!group Network
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # @!attribute network_proxy
+    # @return [String] proxy server to use for internet connections.
 
     def network_proxy
       buffer = "\0" * 512
@@ -925,128 +894,12 @@ module FMOD
       FMOD.invoke(:System_SetNetworkProxy, self, url.encode(Encoding::UTF_8))
     end
 
+    # @!attribute network_timeout
+    # @return [Integer] the timeout, in milliseconds, for network streams.
     integer_reader(:network_timeout, :System_GetNetworkTimeout)
     integer_writer(:network_timeout=, :System_SetNetworkTimeout)
 
-    integer_reader(:software_channels, :System_GetSoftwareChannels)
-    integer_writer(:software_channels=, :System_SetSoftwareChannels, 0, 64)
-
-
-
-    def master_channel_group
-      FMOD.invoke(:System_GetMasterChannelGroup, self, group = int_ptr)
-      ChannelGroup.new(group)
-    end
-
-    def master_sound_group
-      FMOD.invoke(:System_GetMasterSoundGroup, self, group = int_ptr)
-      SoundGroup.new(group)
-    end
-
-
-    def update
-      FMOD.invoke(:System_Update, self)
-    end
-
-    ##
-    # Closes the {System} object without freeing the object's memory, so the
-    # system handle will still be valid.
-    #
-    # Closing the output renders objects created with this system object
-    # invalid. Make sure any sounds, channel groups, geometry and DSP objects
-    # are released before closing the system object.
-    #
-    # @return [void]
-    def close
-      FMOD.invoke(:System_Close, self)
-    end
-
-    ##
-    # @!attribute [r] version
-    # @return [String] the current version of FMOD being used.
-    def version
-      FMOD.invoke(:System_GetVersion, self, version = "\0" * SIZEOF_INT)
-      FMOD.uint2version(version)
-    end
-
-    ##
-    # Plays a sound object on a particular channel and {ChannelGroup}.
-    #
-    # When a sound is played, it will use the sound's default frequency and
-    # priority.
-    #
-    # A sound defined as {Mode::THREE_D} will by default play at the position of
-    # the listener.
-    #
-    # Channels are reference counted. If a channel is stolen by the FMOD
-    # priority system, then the handle to the stolen voice becomes invalid, and
-    # Channel based commands will not affect the new sound playing in its place.
-    # If all channels are currently full playing a sound, FMOD will steal a
-    # channel with the lowest priority sound. If more channels are playing than
-    # are currently available on the sound-card/sound device or software mixer,
-    # then FMOD will "virtualize" the channel. This type of channel is not
-    # heard, but it is updated as if it was playing. When its priority becomes
-    # high enough or another sound stops that was using a real hardware/software
-    # channel, it will start playing from where it should be. This technique
-    # saves CPU time (thousands of sounds can be played at once without actually
-    # being mixed or taking up resources), and also removes the need for the
-    # user to manage voices themselves. An example of virtual channel usage is a
-    # dungeon with 100 torches burning, all with a looping crackling sound, but
-    # with a sound-card that only supports 32 hardware voices. If the 3D
-    # positions and priorities for each torch are set correctly, FMOD will play
-    # all 100 sounds without any 'out of channels' errors, and swap the real
-    # voices in and out according to which torches are closest in 3D space.
-    # Priority for virtual channels can be changed in the sound's defaults, or
-    # at runtime with {Channel.priority}.
-    #
-    # @param sound [Sound] The sound to play.
-    # @param group [ChannelGroup] The {ChannelGroup} become a member of. This is
-    #   more efficient than using {Channel.group}, as it does it during the
-    #   channel setup, rather than connecting to the master channel group, then
-    #   later disconnecting and connecting to the new {ChannelGroup} when
-    #   specified. Specify +nil+ to ignore (use master {ChannelGroup}).
-    # @param paused [Boolean] flag to specify whether to start the channel
-    #   paused or not. Starting a channel paused allows the user to alter its
-    #   attributes without it being audible, and un-pausing with
-    #   ChannelControl.resume actually starts the sound.
-    #
-    # @return [Channel] the newly playing channel.
-    def play_sound(sound, group = nil, paused = false)
-      FMOD.type?(sound, Sound)
-      channel = int_ptr
-      FMOD.invoke(:System_PlaySound, self, sound, group, paused.to_i, channel)
-      Channel.new(channel)
-    end
-
-    def play_dsp(dsp, group = nil, paused = false)
-      FMOD.type?(dsp, Dsp)
-      channel = int_ptr
-      FMOD.invoke(:System_PlayDSP, self, dsp, group, paused.to_i, channel)
-      Channel.new(channel)
-    end
-
-    def [](index)
-      reverb = Reverb.new
-      FMOD.invoke(:System_GetReverbProperties, self, index, reverb)
-      reverb
-    end
-
-    def []=(index, reverb)
-      FMOD.type?(reverb, Reverb)
-      FMOD.invoke(:System_SetReverbProperties, self, index, reverb)
-    end
-
-    def mixer_suspend
-      FMOD.invoke(:System_MixerSuspend, self)
-      if block_given?
-        yield
-        FMOD.invoke(:System_MixerResume, self)
-      end
-    end
-
-    def mixer_resume
-      FMOD.invoke(:System_MixerResume, self)
-    end
+    # @!endgroup
 
     ##
     # Route the signal from a channel group into a separate audio port on the
@@ -1212,6 +1065,244 @@ module FMOD
       FMOD.type?(format, SoftwareFormat)
       FMOD.invoke(:System_GetSoftwareFormat, self, *format.values)
     end
+
+    ##
+    # Retrieves the internal master channel group. This is the default channel
+    # group that all channels play on.
+    #
+    # This channel group can be used to do things like set the master volume for
+    # all playing sounds. See the ChannelGroup API for more functionality.
+    # @return [ChannelGroup] the internal master channel group.
+    def master_channel_group
+      FMOD.invoke(:System_GetMasterChannelGroup, self, group = int_ptr)
+      ChannelGroup.new(group)
+    end
+
+    ##
+    # @@return [SoundGroup] the default sound group, where all sounds are placed
+    # when they are created.
+    def master_sound_group
+      FMOD.invoke(:System_GetMasterSoundGroup, self, group = int_ptr)
+      SoundGroup.new(group)
+    end
+
+    ##
+    # Closes the {System} object without freeing the object's memory, so the
+    # system handle will still be valid.
+    #
+    # Closing the output renders objects created with this system object
+    # invalid. Make sure any sounds, channel groups, geometry and DSP objects
+    # are released before closing the system object.
+    #
+    # @return [void]
+    def close
+      FMOD.invoke(:System_Close, self)
+    end
+
+    ##
+    # @!attribute [r] version
+    # @return [String] the current version of FMOD being used.
+    def version
+      FMOD.invoke(:System_GetVersion, self, version = "\0" * SIZEOF_INT)
+      FMOD.uint2version(version)
+    end
+
+    ##
+    # Plays a sound object on a particular channel and {ChannelGroup}.
+    #
+    # When a sound is played, it will use the sound's default frequency and
+    # priority.
+    #
+    # A sound defined as {Mode::THREE_D} will by default play at the position of
+    # the listener.
+    #
+    # Channels are reference counted. If a channel is stolen by the FMOD
+    # priority system, then the handle to the stolen voice becomes invalid, and
+    # Channel based commands will not affect the new sound playing in its place.
+    # If all channels are currently full playing a sound, FMOD will steal a
+    # channel with the lowest priority sound. If more channels are playing than
+    # are currently available on the sound-card/sound device or software mixer,
+    # then FMOD will "virtualize" the channel. This type of channel is not
+    # heard, but it is updated as if it was playing. When its priority becomes
+    # high enough or another sound stops that was using a real hardware/software
+    # channel, it will start playing from where it should be. This technique
+    # saves CPU time (thousands of sounds can be played at once without actually
+    # being mixed or taking up resources), and also removes the need for the
+    # user to manage voices themselves. An example of virtual channel usage is a
+    # dungeon with 100 torches burning, all with a looping crackling sound, but
+    # with a sound-card that only supports 32 hardware voices. If the 3D
+    # positions and priorities for each torch are set correctly, FMOD will play
+    # all 100 sounds without any 'out of channels' errors, and swap the real
+    # voices in and out according to which torches are closest in 3D space.
+    # Priority for virtual channels can be changed in the sound's defaults, or
+    # at runtime with {Channel.priority}.
+    #
+    # @param sound [Sound] The sound to play.
+    # @param group [ChannelGroup] The {ChannelGroup} become a member of. This is
+    #   more efficient than using {Channel.group}, as it does it during the
+    #   channel setup, rather than connecting to the master channel group, then
+    #   later disconnecting and connecting to the new {ChannelGroup} when
+    #   specified. Specify +nil+ to ignore (use master {ChannelGroup}).
+    # @param paused [Boolean] flag to specify whether to start the channel
+    #   paused or not. Starting a channel paused allows the user to alter its
+    #   attributes without it being audible, and un-pausing with
+    #   ChannelControl.resume actually starts the sound.
+    #
+    # @return [Channel] the newly playing channel.
+    def play_sound(sound, group = nil, paused = false)
+      FMOD.type?(sound, Sound)
+      channel = int_ptr
+      FMOD.invoke(:System_PlaySound, self, sound, group, paused.to_i, channel)
+      Channel.new(channel)
+    end
+
+    ##
+    # Plays a sound object on a particular channel and {ChannelGroup}.
+    #
+    # When a sound is played, it will use the sound's default frequency and
+    # priority.
+    #
+    # A sound defined as {Mode::THREE_D} will by default play at the position of
+    # the listener.
+    #
+    # Channels are reference counted. If a channel is stolen by the FMOD
+    # priority system, then the handle to the stolen voice becomes invalid, and
+    # Channel based commands will not affect the new sound playing in its place.
+    # If all channels are currently full playing a sound, FMOD will steal a
+    # channel with the lowest priority sound. If more channels are playing than
+    # are currently available on the sound-card/sound device or software mixer,
+    # then FMOD will "virtualize" the channel. This type of channel is not
+    # heard, but it is updated as if it was playing. When its priority becomes
+    # high enough or another sound stops that was using a real hardware/software
+    # channel, it will start playing from where it should be. This technique
+    # saves CPU time (thousands of sounds can be played at once without actually
+    # being mixed or taking up resources), and also removes the need for the
+    # user to manage voices themselves. An example of virtual channel usage is a
+    # dungeon with 100 torches burning, all with a looping crackling sound, but
+    # with a sound-card that only supports 32 hardware voices. If the 3D
+    # positions and priorities for each torch are set correctly, FMOD will play
+    # all 100 sounds without any 'out of channels' errors, and swap the real
+    # voices in and out according to which torches are closest in 3D space.
+    # Priority for virtual channels can be changed in the sound's defaults, or
+    # at runtime with {Channel.priority}.
+    #
+    # @param dsp [Dsp] The DSP to play.
+    # @param group [ChannelGroup] The {ChannelGroup} become a member of. This is
+    #   more efficient than using {Channel.group}, as it does it during the
+    #   channel setup, rather than connecting to the master channel group, then
+    #   later disconnecting and connecting to the new {ChannelGroup} when
+    #   specified. Specify +nil+ to ignore (use master {ChannelGroup}).
+    # @param paused [Boolean] flag to specify whether to start the channel
+    #   paused or not. Starting a channel paused allows the user to alter its
+    #   attributes without it being audible, and un-pausing with
+    #   ChannelControl.resume actually starts the sound.
+    #
+    # @return [Channel] the newly playing channel.
+    def play_dsp(dsp, group = nil, paused = false)
+      FMOD.type?(dsp, Dsp)
+      channel = int_ptr
+      FMOD.invoke(:System_PlayDSP, self, dsp, group, paused.to_i, channel)
+      Channel.new(channel)
+    end
+
+    ##
+    # Suspend mixer thread and relinquish usage of audio hardware while
+    # maintaining internal state.
+    #
+    # @overload mixer_suspend
+    #   When called with a block, automatically resumes the mixer when the block
+    #   exits.
+    #   @yield Yields control back to receiver.
+    # @overload mixer_suspend
+    #   When called without a block, user must call {#mixer_resume}.
+    #
+    # @return [void]
+    # @see mixer_resume
+    def mixer_suspend
+      FMOD.invoke(:System_MixerSuspend, self)
+      if block_given?
+        yield
+        FMOD.invoke(:System_MixerResume, self)
+      end
+    end
+
+    ##
+    # Resume mixer thread and reacquire access to audio hardware.
+    # @return [void]
+    # @see mixer_suspend
+    def mixer_resume
+      FMOD.invoke(:System_MixerResume, self)
+    end
+
+    ##
+    # Retrieves the current reverb environment for the specified reverb
+    # instance.
+    #
+    # @param index [Integer] Index of the particular reverb instance to target,
+    #   from 0 to {FMOD::MAX_REVERB} inclusive.
+    #
+    # @return [Reverb] The specified Reverb instance.
+    def [](index)
+      reverb = Reverb.new
+      FMOD.invoke(:System_GetReverbProperties, self, index, reverb)
+      reverb
+    end
+
+    ##
+    # Sets parameters for the global reverb environment.
+    #
+    # @param index [Integer] Index of the particular reverb instance to target,
+    #   from 0 to {FMOD::MAX_REVERB} inclusive.
+    # @param reverb [Reverb] A structure which defines the attributes for the
+    #   reverb. Passing {FMOD::NULL} or +nil+ to this function will delete the
+    #   physical reverb.
+    #
+    # @return [Reverb] the specified reverb.
+    def []=(index, reverb)
+      FMOD.type?(reverb, Reverb)
+      FMOD.invoke(:System_SetReverbProperties, self, index, reverb)
+    end
+
+    alias_method :get_reverb, :[]
+    alias_method :set_reverb, :[]=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    integer_reader(:software_channels, :System_GetSoftwareChannels)
+    integer_writer(:software_channels=, :System_SetSoftwareChannels, 0, 64)
+
+
+
+
+
+    def update
+      FMOD.invoke(:System_Update, self)
+    end
+
+
 
     def stream_buffer
       size, type = "\0" * SIZEOF_INT, "\0" * SIZEOF_INT

@@ -1,5 +1,12 @@
 
 module FMOD
+
+  ##
+  # FMOD supports the supply of polygon mesh data, that can be processed in
+  # realtime to create the effect of occlusion in a real 3D world. In real world
+  # terms, the user can stop sounds travelling through walls, or even confine
+  # reverb inside a geometric volume so that it doesn't leak out into other
+  # areas.
   class Geometry < Handle
 
     include Enumerable

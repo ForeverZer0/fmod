@@ -27,6 +27,7 @@ module FMOD
     require_relative './core/parameter_info'
     require_relative './core/parameter_type'
     require_relative './core/result'
+    require_relative './core/reverb_index'
     require_relative './core/reverb'
     require_relative './core/sound_ex_info'
     require_relative './core/sound_format'

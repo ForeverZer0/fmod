@@ -3,14 +3,19 @@
 module FMOD
 
   module Core
+
     ##
     # Structure defining a reverb environment.
     class Reverb < Structure
 
+      ##
+      # @param address [Pointer, Integer, String, nil] The address in memory
+      #   where the structure will be created from. If no address is given, new
+      #   memory will be allocated.
       def initialize(address = nil)
         types = Array.new(12, TYPE_FLOAT)
-        members = [:decay_time, :early_delay, :late_delay,
-                   :hf_reference, :hf_decay_ratio, :diffusion, :density, :low_shelf_freq,
+        members = [:decay_time, :early_delay, :late_delay, :hf_reference,
+                   :hf_decay_ratio, :diffusion, :density, :low_shelf_freq,
                    :low_shelf_gain, :high_cut, :early_late_mix, :wet_level]
         super(address, types, members)
       end
@@ -21,52 +26,158 @@ module FMOD
         define_method(symbol) {self[symbol]}
       end
 
+      # @!attribute decay_time
+      # Reverberation decay time (ms).
+      # * *Minimum:* 0.0
+      # * *Maximum:* 20000.0
+      # * *Default:* 1500.0
       def decay_time=(value)
         self[:decay_time] = value.clamp(0.0, 20000.0)
       end
 
+      # @!attribute early_delay
+      # Initial reflection delay time (ms).
+      # * *Minimum:* 0.0
+      # * *Maximum:* 300.0
+      # * *Default:* 7.0
+      # @return [Float]
       def early_delay=(value)
         self[:early_delay] = value.clamp(0.0, 300.0)
       end
 
+      # @!attribute late_delay
+      # Late reverberation delay time relative to initial reflection (ms).
+      # * *Minimum:* 0.0
+      # * *Maximum:* 100.0
+      # * *Default:* 11.0
+      # @return [Float]
       def late_delay=(value)
         self[:late_delay] = value.clamp(0.0, 100.0)
       end
 
+      # @!attribute hf_reference
+      # Reference high frequency (Hz).
+      # * *Minimum:* 20.0
+      # * *Maximum:* 20000.0
+      # * *Default:* 5000.0
+      # @return [Float]
       def hf_reference=(value)
         self[:hf_reference] = value.clamp(20.0, 20000.0)
       end
 
+      # @!attribute hf_decay_ratio
+      # High-frequency to mid-frequency decay time ratio (%).
+      # * *Minimum:* 10.0
+      # * *Maximum:* 100.0
+      # * *Default:* 50.0
+      # @return [Float]
       def hf_decay_ratio=(value)
         self[:hf_decay_ratio] = value.clamp(10.0, 100.0)
       end
 
+      # @!attribute diffusion
+      # The echo density in the late reverberation decay (%).
+      # * *Minimum:* 0.0
+      # * *Maximum:* 100.0
+      # * *Default:* 100.0
+      # @return [Float]
       def diffusion=(value)
         self[:diffusion] = value.clamp(0.0, 100.0)
       end
 
+      # @!attribute density
+      # The modal density in the late reverberation decay (%).
+      # * *Minimum:* 0.0
+      # * *Maximum:* 100.0
+      # * *Default:* 100.0
+      # @return [Float]
       def density=(value)
         self[:density] = value.clamp(0.0, 100.0)
       end
 
+      # @!attribute low_shelf_freq
+      # Reference low frequency (Hz).
+      # * *Minimum:* 20.0
+      # * *Maximum:* 1000.0
+      # * *Default:* 250.0
+      # @return [Float]
       def low_shelf_freq=(value)
         self[:low_shelf_freq] = value.clamp(20.0, 1000.0)
       end
 
+      # @!attribute low_shelf_gain
+      # Relative room effect level at low frequencies (dB).
+      # * *Minimum:* -36.0
+      # * *Maximum:* 12.0
+      # * *Default:* 0.0
+      # @return [Float]
       def low_shelf_gain=(value)
         self[:low_shelf_gain] = value.clamp(-36.0, 12.0)
       end
 
+      # @!attribute high_cut
+      # Relative room effect level at high frequencies (Hz).
+      # * *Minimum:* 20.0
+      # * *Maximum:* 20000.0
+      # * *Default:* 20000.0
+      # @return [Float]
       def high_cut=(value)
         self[:high_cut] = value.clamp(20.0, 20000.0)
       end
 
+      # @!attribute early_late_mix
+      # Early reflections level relative to room effect (%).
+      # * *Minimum:* 0.0
+      # * *Maximum:* 100.0
+      # * *Default:* 50.0
+      # @return [Float]
       def early_late_mix=(value)
         self[:early_late_mix] = value.clamp(0.0, 100.0)
       end
 
+      # @!attribute wet_level
+      # Room effect level at mid frequencies (dB).
+      # * *Minimum:* -80.0
+      # * *Maximum:* 20.0
+      # * *Default:* -6.0
+      # @return [Float]
       def wet_level=(value)
         self[:wet_level] = value.clamp(-80.0, 20.0)
+      end
+
+      ##
+      # Returns a pre-mad Reverb preset from the specified {ReverbIndex}.
+      #
+      # @param index [Integer] The index of the preset to retrieve.
+      #
+      # @return [Reverb] the reverb preset.
+      def self.from_index(index)
+        case index
+        when ReverbIndex::GENERIC then generic
+        when ReverbIndex::PADDED_CELL then padded_cell
+        when ReverbIndex::ROOM then room
+        when ReverbIndex::BATHROOM then bathroom
+        when ReverbIndex::LIVING_ROOM then living_room
+        when ReverbIndex::STONE_ROOM then stone_room
+        when ReverbIndex::AUDITORIUM then auditorium
+        when ReverbIndex::CONCERT_HALL then concert_hall
+        when ReverbIndex::CAVE then cave
+        when ReverbIndex::ARENA then arena
+        when ReverbIndex::HANGAR then hangar
+        when ReverbIndex::CARPETED_HALLWAY then carpeted_hallway
+        when ReverbIndex::HALLWAY then hallway
+        when ReverbIndex::STONE_CORRIDOR then stone_corridor
+        when ReverbIndex::ALLEY then alley
+        when ReverbIndex::FOREST then forest
+        when ReverbIndex::CITY then city
+        when ReverbIndex::MOUNTAINS then mountains
+        when ReverbIndex::QUARRY then quarry
+        when ReverbIndex::PLAIN then plain
+        when ReverbIndex::PARKING_LOT then parking_lot
+        when ReverbIndex::SEWER_PIPE then sewer_pipe
+        when ReverbIndex::UNDERWATER then underwater
+        else off
+        end
       end
 
       ##

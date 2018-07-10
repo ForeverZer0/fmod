@@ -1,4 +1,12 @@
-=== 0.9.1 /  2018-07-10
+=== 0.9.2 / 2018
+
+* added ReverbIndex
+* added .from_index to Reverb class
+
+* Documented Reverb
+
+
+=== 0.9.1 / 2018-07-10
 
 * Added Features
     * Expanded methods to FMOD::Core::Structure
@@ -10,6 +18,8 @@
 
 * Documentation
     * Completed for Channel, ChannelGroup, and ChannelControl
+    * Various enum classes
+    * Current documentation completion is 71%
 
 * Misc.
     * Updated gem description (poor formatting)

@@ -42,6 +42,10 @@ module FMOD
 
     alias_method :sound, :[]
 
+    ##
+    # @!attribute [r] parent
+    # @return [System] the parent {System} object that was used to create this
+    #   object.
     def parent
       FMOD.invoke(:SoundGroup_GetSystemObject, self, system = int_ptr)
       System.new(system)

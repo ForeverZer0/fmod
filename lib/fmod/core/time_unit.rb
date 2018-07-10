@@ -1,5 +1,8 @@
 module FMOD
   module Core
+
+    ##
+    # Strongly-typed values for indicating various units of time.
     module TimeUnit
 
       ##
