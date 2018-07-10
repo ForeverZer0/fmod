@@ -1,0 +1,18 @@
+=== 0.9.1 /  2018-07-10
+
+* Added Features
+    * Expanded methods to FMOD::Core::Structure
+        * names - Gets array of field name symbols
+        * values - Gets all the structure fields as an array
+
+* Bug Fixes
+    * Fixed getting Reverb from System object would cause segmentation fault
+
+* Misc.
+    * Updated gem description (poor formatting)
+    * Added templates for pull-requests, bugs, etc.
+
+
+=== 0.9.0 / 2018-07-09
+
+* Initial public release

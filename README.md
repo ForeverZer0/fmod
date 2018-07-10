@@ -1,5 +1,6 @@
 # FMOD
 
+[![Gem Version](https://badge.fury.io/rb/fmod.svg)](https://badge.fury.io/rb/fmod) ![Documentation](https://img.shields.io/badge/Documentation-52%25-orange.svg)
 
 
 A full-featured (*complete* Ruby wrapper) of the ultra-powerful FMOD Low-Level API. Uses the built-in Fiddle library (Ruby 2.0+), and has no external gem dependencies, all that is needed is the native FMOD platform-specific native FMOD libraries.

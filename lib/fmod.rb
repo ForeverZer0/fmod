@@ -430,7 +430,7 @@ module FMOD
   #
   # @param function [Symbol] Symbol name of an FMOD function, without the the
   #   leading "FMOD_" prefix.
-  # @raise [Error] if the result code returned by FMOD is not {Result::OK}.
+  # @raise [Error] if the result code returned by FMOD is not 0.
   # @return [void]
   # @see invoke_protect
   def self.invoke(function, *args)

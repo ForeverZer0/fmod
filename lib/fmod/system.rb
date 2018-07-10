@@ -1026,9 +1026,9 @@ module FMOD
     end
 
     def [](index)
-      reverb = int_ptr
+      reverb = Reverb.new
       FMOD.invoke(:System_GetReverbProperties, self, index, reverb)
-      Reverb.new(reverb.unpack1('J'))
+      reverb
     end
 
     def []=(index, reverb)
