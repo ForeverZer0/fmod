@@ -7,6 +7,25 @@ module FMOD
   class Dsp < Handle
 
     ##
+    # Describes mix levels that allow the user to scale the affect of a DSP
+    # effect, through control of the "wet" mix, which is the post-processed
+    # signal and the "dry" which is the pre-processed signal.
+    #
+    # @attr pre_wet [Float] A floating point value from 0.0 to 1.0, describing a
+    #   linear scale of the "wet" (pre-processed signal) mix of the effect.
+    #   Default is 1.0. Scale can be lower than 0.0 (negating) and higher than
+    #   1.0 (amplifying).
+    # @attr post_wet [Float] A floating point value from 0.0 to 1.0, describing
+    #   a linear scale of the "'wet' "(post-processed signal) mix of the effect.
+    #   Default is 1.0. Scale can be lower than 0.0 (negating) and higher than
+    #   1.0 (amplifying).
+    # @attr dry [Float] A floating point value from 0.0 to 1.0, describing a
+    #   linear scale of the "dry" (pre-processed signal) mix of the effect.
+    #   Default is 0.0. Scale can be lower than 0.0 and higher than 1.0
+    #   (amplifying).
+    WetDryMix = Struct.new(:pre_wet, :post_wet, :dry)
+
+    ##
     #  Defines the signal format of a dsp unit so that the signal is processed
     #  on the speakers specified, as well as the number of channels in the unit
     #  that a read callback will process, and the output signal of the unit.

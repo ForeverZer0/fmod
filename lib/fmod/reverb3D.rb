@@ -16,32 +16,6 @@ module FMOD
   class Reverb3D < Handle
 
     ##
-    # @!attribute properties
-    # Gets or sets the reverb parameters for the current reverb object.
-    # @return [Reverb]
-
-    ##
-    # @!attribute position
-    # A {Vector} containing the 3D position of the center of the reverb in 3D
-    # space.
-    # * *Default:* {Vector.zero}
-    # @return [Vector]
-
-    ##
-    # @!attribute min_distance
-    # The distance from the center-point that the reverb will have full effect
-    # at.
-    # * *Default:* 0.0
-    # @return [Float]
-
-    ##
-    # @!attribute max_distance
-    # The distance from the center-point that the reverb will not have any
-    # effect.
-    # * *Default:* 0.0
-    # @return [Float]
-
-    ##
     # @!attribute active
     # Gets or sets the a state to disable or enable a reverb object so that it
     # does or does not contribute to the 3D scene.
@@ -49,6 +23,13 @@ module FMOD
     # @return [Boolean]
     bool_reader(:active, :Reverb3D_GetActive)
     bool_writer(:active=, :Reverb3D_SetActive)
+
+    ##
+    # @!attribute min_distance
+    # The distance from the center-point that the reverb will have full effect
+    # at.
+    # * *Default:* 0.0
+    # @return [Float]
 
     def min_distance
       buffer = "\0" * SIZEOF_FLOAT
@@ -61,6 +42,13 @@ module FMOD
         distance, max_distance )
     end
 
+    ##
+    # @!attribute max_distance
+    # The distance from the center-point that the reverb will not have any
+    # effect.
+    # * *Default:* 0.0
+    # @return [Float]
+
     def max_distance
       buffer = "\0" * SIZEOF_FLOAT
       FMOD.invoke(:Reverb3D_Get3DAttributes, self, nil, nil, buffer)
@@ -71,6 +59,13 @@ module FMOD
       FMOD.invoke(:Reverb3D_Set3DAttributes, self, position,
         min_distance, distance )
     end
+
+    ##
+    # @!attribute position
+    # A {Vector} containing the 3D position of the center of the reverb in 3D
+    # space.
+    # * *Default:* {Vector.zero}
+    # @return [Vector]
 
     def position
       vector = Vector.zero
@@ -83,6 +78,10 @@ module FMOD
       FMOD.invoke(:Reverb3D_Set3DAttributes, self, vector,
         min_distance, max_distance )
     end
+
+    ##
+    # @!attribute properties
+    # @return [Reverb] the reverb parameters for the current reverb object.
 
     def properties
       FMOD.invoke(:Reverb3D_GetProperties, self, reverb = Reverb.new)

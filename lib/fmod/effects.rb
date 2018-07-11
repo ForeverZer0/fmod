@@ -1,5 +1,8 @@
 
 module FMOD
+
+  ##
+  # Namespace containing all of the built-in DSP effects.
   module Effects
 
     require_relative 'effects/channel_mix.rb'

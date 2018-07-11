@@ -1,5 +1,6 @@
 module FMOD
   module Core
+
     class FileSystem
 
       include Fiddle

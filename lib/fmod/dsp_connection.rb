@@ -1,5 +1,8 @@
 
 module FMOD
+
+  ##
+  # Represents a connection between two DSP units
   class DspConnection < Handle
 
     ##

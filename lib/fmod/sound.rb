@@ -1,5 +1,8 @@
 
 module FMOD
+
+  ##
+  # Represents the actual data source of audio, usually an audio file or stream.
   class Sound < Handle
 
     ##
@@ -764,7 +767,8 @@ module FMOD
       parent.play_sound(self, group, false)
     end
 
-    
+    ##
+    # Emulates an Array-type container of a {Tag}'s objects within a {Sound}.
     class TagCollection
 
       include Enumerable
@@ -781,6 +785,9 @@ module FMOD
         self
       end
 
+      ##
+      # @!attribute [r] count
+      # @return [Integer] the number of tags in the collection.
       def count
         buffer = "\0" * Fiddle::SIZEOF_INT
         FMOD.invoke(:Sound_GetNumTags, @sound, buffer, nil)
@@ -789,12 +796,23 @@ module FMOD
 
       alias_method :size, :count
 
+      ##
+      # @!attribute [r] count
+      # @return [Integer] the number of updated tags in the collection since
+      #   last time this value was checked.
       def updated_count
         buffer = "\0" * Fiddle::SIZEOF_INT
         FMOD.invoke(:Sound_GetNumTags, @sound, nil, buffer)
         buffer.unpack1('l')
       end
 
+      ##
+      # Retrieves a descriptive tag stored by the sound, to describe things like
+      # the song name, author etc.
+      #
+      # @param index [Integer] Index into the collection to retrieve the tag.
+      #
+      # @return [Tag, nil] the desired {Tag} or +nil+ if index is out of range.
       def [](index)
         tag = FMOD::Core::Tag.new
         if index.is_a?(Integer)
@@ -805,6 +823,8 @@ module FMOD
         end
         tag
       end
+
+      alias_method :tag, :[]
     end
   end
 end

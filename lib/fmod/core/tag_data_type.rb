@@ -37,6 +37,8 @@ module FMOD
       # @deprecated Do not use.
       # A CDTOC tag.
       CDTOC = 7
+
+      deprecate_constant :CDTOC
     end
   end
 end

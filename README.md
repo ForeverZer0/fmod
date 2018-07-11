@@ -1,6 +1,6 @@
 # FMOD
 
-[![Gem Version](https://badge.fury.io/rb/fmod.svg)](https://badge.fury.io/rb/fmod) ![Documentation](https://img.shields.io/badge/Documentation-71%25-orange.svg)
+[![Gem Version](https://badge.fury.io/rb/fmod.svg)](https://badge.fury.io/rb/fmod) ![Documentation](https://img.shields.io/badge/Documentation-99.22%25-green.svg)
 
 
 A full-featured (*complete* Ruby wrapper) of the ultra-powerful FMOD Low-Level API. Uses the built-in Fiddle library (Ruby 2.0+), and has no external gem dependencies, all that is needed is the native FMOD platform-specific native FMOD libraries.
@@ -71,8 +71,6 @@ sound.play
 Each get/set method in the FMOD API has been converted to an "attribute" that can be accessed in the Ruby way. So instead of`FMOD_Channel_GetVolume` and `FMOD_Channel_SetVolume`, it is simply `channel.volume` and `channel.volume = value`. 
 
 ## Future Releases
-
-As of the current release, only slightly better than 71% of documentation is complete. The scripts are highly technical, and good documentation takes time, but it is actively being updated, and will be completed at the highest priority level. If you are using version `1.0.0`, you will have to rely more heavily upon the included FMOD Low-Level API Reference that is included in the `./extras` folder.
 
 There is still yet to be a few areas that need completed, and are in active development. Included are the following known issues:
    * FMOD plugin support (including 3rd party codecs)

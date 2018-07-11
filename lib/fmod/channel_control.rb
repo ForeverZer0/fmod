@@ -7,6 +7,16 @@ module FMOD
   class ChannelControl < Handle
 
     ##
+    # Describes a volume point to fade from or towards, using a clock offset and
+    # 0.0 to 1.0 volume level.
+    #
+    # @attr clock [Integer] DSP clock of the parent channel group to set the
+    #   fade point volume.
+    # @attr volume [Float] lume level where 0.0 is silent and 1.0 is normal
+    #   volume. Amplification is supported.
+    FadePoint = Struct.new(:clock, :volume)
+
+    ##
     # Emulates an Array-type container of a {ChannelControl}'s DSP chain.
     class DspChain
 
@@ -518,6 +528,43 @@ module FMOD
       FMOD.type?(vector, Vector)
       FMOD.invoke(:ChannelGroup_Set3DConeOrientation, self, vector)
       vector
+    end
+
+    ##
+    # @!attribute cone_settings
+    # The angles that define the sound projection cone including the volume when
+    # outside the cone.
+    # @since 0.9.2
+    # @return [ConeSettings] the sound projection cone.
+    def cone_settings
+      args = ["\0" * SIZEOF_FLOAT, "\0" * SIZEOF_FLOAT, "\0" * SIZEOF_FLOAT]
+      FMOD.invoke(:ChannelGroup_Get3DConeSettings, self, *args)
+      ConeSettings.new(*args.map { |arg| arg.unpack1('f') } )
+    end
+
+    def cone_settings=(settings)
+      FMOD.type?(settings, ConeSettings)
+      set_cone(*settings.values)
+      settings
+    end
+
+    ##
+    # Sets the angles that define the sound projection cone including the volume
+    # when outside the cone.
+    # @param inside_angle [Float] Inside cone angle, in degrees. This is the
+    #   angle within which the sound is at its normal volume.
+    # @param outside_angle [Float] Outside cone angle, in degrees. This is the
+    #   angle outside of which the sound is at its outside volume.
+    # @param outside_volume [Float] Cone outside volume.
+    # @since 0.9.2
+    # @return [void]
+    def set_cone(inside_angle, outside_angle, outside_volume)
+      if outside_angle < inside_angle
+        raise Error, 'Outside angle must be greater than inside angle.'
+      end
+      FMOD.invoke(:ChaennlGroup_Set3DConeSettings, self, inside_angle,
+                  outside_angle, outside_volume)
+      self
     end
 
     # @!endgroup

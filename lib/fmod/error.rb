@@ -1,4 +1,7 @@
 module FMOD
+
+  ##
+  # Exception class for FMOD errors.
   class Error < StandardError
 
     include FMOD::Core

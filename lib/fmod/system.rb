@@ -1,20 +1,80 @@
 
 
 module FMOD
+
+  ##
+  # The primary central class of FMOD. This class acts as a factory for creation
+  # of other core FMOD objects, and a centralized control interface. All core
+  # FMOD objects belong to a System object.
   class System < Handle
 
+    ##
+    # Contains values for describing the current CPU time used by FMOD.
+    #
+    # @attr dsp [Float] The current DSP mixing engine CPU usage. Result will be
+    #   from 0.0 to 100.0.
+    # @attr stream [Float] The current streaming engine CPU usage. Result will
+    #   be from 0.0 to 100.0.
+    # @attr geometry [Float] The current geometry engine CPU usage. Result will
+    #   be from 0.0 to 100.0.
+    # @attr update [Float] The current System::update CPU usage. Result will be
+    #   from 0.0 to 100.0.
+    # @attr total [Float] The current total CPU usage. Result will be from 0 to
+    #   100.0.
     CpuUsage = Struct.new(:dsp, :stream, :geometry, :update, :total)
 
+    ##
+    # Contains the amount of dedicated sound ram available if the platform
+    # supports it.
+    # @attr current [Integer] The currently allocated sound RAM memory at time
+    #   of call.
+    # @attr max [Integer] The maximum allocated sound RAM memory since the
+    #   System was created.
+    # @attr total [Integer] The total amount of sound RAM available on this
+    #   device.
     RamUsage = Struct.new(:current, :max, :total)
 
+    ##
+    # Contains information about file reads by FMOD.
+    # @attr sample [Integer] The total bytes read from file for loading
+    #   sample data.
+    # @attr stream [Integer] The total bytes read from file for streaming
+    #   sounds.
+    # @attr other [Integer] The total bytes read for non-audio data such
+    #   as FMOD Studio banks.
     FileUsage = Struct.new(:sample, :stream, :other)
 
+    # Represents a logical position of a speaker.
+    # @attr index [Integer] The index of the speaker.
+    # @attr x [Float] The x-coordinate of the speaker.
+    # @attr y [Float] The y-coordinate of the speaker.
+    # @attr active [Boolean] +true+ if speaker will be enabled,
+    #   otherwise +false+.
     Speaker = Struct.new(:index, :x, :y, :active)
 
+    ##
+    # Defines the information to display for the selected plugin.
+    # @attr handle [Integer] The plugin handle.
+    # @attr type [Integer] The type of the plugin.
+    # @attr name [String] The name of the plugin.
+    # @attr version [Integer] The version number set by the plugin.
     Plugin = Struct.new(:handle, :type, :name, :version)
 
+    # Describes the output format for the software mixer.
+    # @attr sample_rate [Integer] The rate in Hz, that the software mixer will
+    #   run at. Specify values between 8000 and 192000.
+    # @attr speaker_mode [Integer] Speaker setup for the software mixer.
+    # @attr raw_channels [Integer] Number of output channels / speakers to
+    #   initialize the sound card to in raw speaker mode.
     SoftwareFormat = Struct.new(:sample_rate, :speaker_mode, :raw_channels)
 
+    ##
+    # The buffer size settings for the FMOD software mixing engine.
+    # @attr size [Integer] The mixer engine block size in samples. Default is
+    #   1024. (milliseconds = 1024 at 48khz = 1024 / 48000 * 1000 = 10.66ms).
+    # @attr count [Integer] The mixer engine number of buffers used. Default is
+    #   4. To get the total buffer size multiply the buffer length by the number
+    #   of buffers. By default this would be 4*1024.
     DspBuffer = Struct.new(:size, :count)
 
     ##
@@ -28,7 +88,10 @@ module FMOD
     #   @see TimeUnit
     StreamBuffer = Struct.new(:size, :type)
 
-    def initialize(handle)
+    ##
+    # @param address [Pointer, Integer, String] The address of a native FMOD
+    #   pointer.
+    def initialize(address)
       super
       @rolloff_callbacks = []
       sig = [TYPE_VOIDP, TYPE_FLOAT]
@@ -43,6 +106,13 @@ module FMOD
       FMOD.invoke(:System_Set3DRolloffCallback, self, cb)
     end
 
+    ##
+    # When FMOD wants to calculate 3D volume for a channel, this callback can be
+    # used to override the internal volume calculation based on distance.
+    #
+    # @param proc [Proc] Proc to call. Optional, must give block if nil.
+    # @yield [index] The block to call when rolloff is calculated.
+    # @return [void]
     def on_rolloff(proc = nil, &block)
       cb = proc || block
       raise LocalJumpError, "No block given."  if cb.nil?
@@ -1266,44 +1336,15 @@ module FMOD
     alias_method :get_reverb, :[]
     alias_method :set_reverb, :[]=
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    ##
+    # @!attribute software_channels
+    # @return [Integer] the maximum number of software mixed channels possible.
     integer_reader(:software_channels, :System_GetSoftwareChannels)
     integer_writer(:software_channels=, :System_SetSoftwareChannels, 0, 64)
 
-
-
-
-
-    def update
-      FMOD.invoke(:System_Update, self)
-    end
-
-
-
+    ##
+    # @!attribute stream_buffer
+    # @return [StreamBuffer] the internal buffer-size for streams.
     def stream_buffer
       size, type = "\0" * SIZEOF_INT, "\0" * SIZEOF_INT
       FMOD.invoke(:System_GetStreamBufferSize, self, size, type)
@@ -1316,6 +1357,9 @@ module FMOD
       FMOD.invoke(:System_SetStreamBufferSize, self, *buffer.values)
     end
 
+    ##
+    # @!attribute stream_buffer
+    # @return [DspBuffer] the internal buffer-size for DSP units.
     def dsp_buffer
       size, count = "\0" * SIZEOF_INT, "\0" * SIZEOF_INT
       FMOD.invoke(:System_GetDSPBufferSize, self, size, count)
@@ -1326,6 +1370,18 @@ module FMOD
       FMOD.type?(buffer, DspBuffer)
       raise RangeError, "size must be greater than 0" unless buffer.size > 0
       FMOD.invoke(:System_SetDSPBufferSize, self, *buffer.values)
+    end
+
+    ##
+    # Updates the FMOD system. This should be called once per "game tick", or
+    # once per frame in your application.
+    #
+    # @note Various callbacks are driven from this function, and it must be
+    #   called for them to be invoked.
+    #
+    # @return [void]
+    def update
+      FMOD.invoke(:System_Update, self)
     end
   end
 end

@@ -3,11 +3,17 @@ module FMOD
 
   module Core
 
-    WetDryMix = Struct.new(:pre_wet, :post_wet, :dry)
-
+    ##
+    # Describes the loop points for the channel.
+    # @attr start [Integer] The  loop start point, this point in time is played
+    #   so it is inclusive.
+    # @attr start_unit [Integer] Time format used for the loop start point. See
+    #   {TimeUnit}.
+    # @attr end [Integer] The loop end point, this point in time is played so it
+    #   is inclusive.
+    # @attr end_unit [Integer] Time format used for the loop end point. See
+    #   {TimeUnit}.
     LoopPoints = Struct.new(:start, :start_unit, :end, :end_unit)
-
-    FadePoint = Struct.new(:clock, :volume)
 
     ##
     # Defines the sound projection cone including the volume when outside the
