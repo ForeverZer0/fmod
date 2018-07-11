@@ -3,7 +3,8 @@
 * added ReverbIndex
 * added .from_index to Reverb class
 
-* Documented Reverb
+ Deprecated constants in DspType: LOW_PASS, LOW_PASS_SIMPLE, HIGH_PASS, HIGH_PASS_SIMPLE, and LADSPA_PLUGIN
+ Deprecated constants in Effects: LowPass, LowPassSimple, HighPass, HighPassSimple, and LadspaPlugin
 
 
 === 0.9.1 / 2018-07-10
