@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Eric "ForeverZer0" Freed']
   spec.email         = ['efreed09@gmail.com']
   spec.summary       = %q{Ruby wrapper around the high performance, cross-platform FMOD low-level sound library. You get all the benefits of the FMOD library, but in the object-oriented Ruby way!}
-  spec.description   = %q{A full-featured (complete Ruby wrapper) of the ultra-powerful FMOD Low-Level API. Uses the built-in Fiddle library (Ruby 2.0+), and has no external gem dependencies, all that is needed is the FMOD platform-specific libraries (included). FMOD supports a host of audio formats including .aiff, .asf, .asx, .dls, .flac, .fsb, .it, .m3u, .mid, .midi, .mod, .mp2, .mp3, .ogg .pls, .s3m , vag, .wav, .wax, .wma, .xm, and .xma.}
+  spec.description   = %q{A full-featured and complete Ruby wrapper of the ultra-powerful FMOD Low-Level API. Uses the built-in Fiddle library (Ruby 2.0+) to eliminate unnecessary external gem dependencies, all that is needed is the FMOD platform-specific libraries (included). FMOD supports a host of audio formats including .aiff, .asf, .asx, .dls, .flac, .fsb, .it, .m3u, .mid, .midi, .mod, .mp2, .mp3, .ogg .pls, .s3m , vag, .wav, .wax, .wma, .xm, and .xma.}
   spec.homepage      = 'https://github.com/ForeverZer0/fmod'
   spec.license       = 'MIT'
   spec.has_rdoc      = 'yard'

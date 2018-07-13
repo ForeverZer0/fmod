@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/fmod.svg)](https://badge.fury.io/rb/fmod) ![Documentation](https://img.shields.io/badge/Documentation-99.22%25-green.svg)
 
 
-A full-featured (*complete* Ruby wrapper) of the ultra-powerful FMOD Low-Level API. Uses the built-in Fiddle library (Ruby 2.0+), and has no external gem dependencies, all that is needed is the native FMOD platform-specific native FMOD libraries.
+A full-featured and complete Ruby wrapper of the ultra-powerful FMOD Low-Level API. Uses the built-in Fiddle library (Ruby 2.0+) to eliminate unnecessary external gem dependencies, all that is needed is the native FMOD platform-specific native FMOD libraries.
 
 Supports a host of audio formats including:
 * Audio Interchange File Format (.aiff )
@@ -47,16 +47,16 @@ And then execute:
 Or install it yourself as:
 
     $ gem install fmod
-    
-The dependent binaries will be loaded automatically on Windows and Mac without further action, and are included within the gem. Linux user will need to locate the `./ext` directory within the gem file and extract `libfmod.zip` into the `./ext` directory. Due to symbolic linking, this process needs done on the host machine, and will hopefully be automated in future releases.
+
+As of version 0.9.3, the external dependencies are no longer bundled with the gem, but are readily available [here](https://github.com/ForeverZer0/fmod/tree/master/ext) (these are the versions the gem was built against). Alternatively, you may download the external libraries directly from the [FMOD website](https://www.fmod.com/download) (free registration required). Place the platform-specific binaries within the working directory, or in directory of your choice and use `FMOD.load_library` to initialize the gem.
 
 ## Usage
 
-Including in the `/extras` folder is the compiled help documentation for the actual FMOD library, which can be helpful for understanding how the API works if you are unfamiliar.
+Including in the `/extras` folder (no longer bundled with the gem as of version `0.9.3`, but found [here on GitHub](https://github.com/ForeverZer0/fmod/tree/master/extras)) is the compiled help documentation for the actual FMOD library, which can be helpful for understanding how the API works if you are unfamiliar.
 
 Those who are familiar with FMOD will find the structure and syntax familiar, though performed in the object-oriented "Ruby" way.  All base core FMOD data types have been created as classes, and mostly share the same names with their C counterpart though in Ruby "snake_case" style as opposed to "UpperCamelCase".  Being object-oriented each class is wrapped around using the functions that relate to it, and doesn't require the use of passing pointers or the object to the methods.
 
-So creating and working with objects has been simplied..
+So creating and working with objects has been simplified..
 
 ```ruby
 require 'fmod'

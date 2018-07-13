@@ -476,10 +476,7 @@ module FMOD
       else 'fmod'  # Will probably fail...
       end
     end
-    if directory.nil?
-      gem_directory = File.dirname(File.dirname(__FILE__))
-      directory = File.join(gem_directory, 'ext')
-    end
+    directory ||= Dir.getwd
     library = File.join(directory, library)
     lib = Fiddle.dlopen(File.expand_path(library))
     import_symbols(lib)
