@@ -7,8 +7,8 @@
 /spec/reports/
 /tmp/
 /.idea
-/extras
-/ext
+/extras/
+/ext/
 
 /**/*.mp3
 
