@@ -132,7 +132,7 @@ module FMOD
       }
       return @type_map[type] if type.is_a?(Integer)
       return @type_map.key(type) if type.is_a?(Class)
-      raise TypeError, "#{type} is not a Integer or Class."
+      raise TypeError, "#{type} is not an Integer or Class."
     end
 
     ##

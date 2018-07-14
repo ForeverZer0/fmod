@@ -356,7 +356,7 @@ module FMOD
     System_GetCPUUsage: Array.new(6, TYPE_VOIDP),
     System_GetDefaultMixMatrix: [TYPE_VOIDP, TYPE_INT, TYPE_INT, TYPE_VOIDP, TYPE_INT],
     System_GetDriver: [TYPE_VOIDP, TYPE_VOIDP],
-    System_GetDriverInfo: [TYPE_VOIDP, TYPE_INT, TYPE_VOIDP, TYPE_INT, TYPE_VOIDP] + Array.new(3, TYPE_VOIDP),
+    System_GetDriverInfo: [TYPE_VOIDP, TYPE_INT, TYPE_VOIDP, TYPE_INT] + Array.new(4, TYPE_VOIDP),
     System_GetDSPBufferSize: Array.new(3, TYPE_VOIDP),
     System_GetDSPInfoByPlugin: [TYPE_VOIDP, TYPE_INT, TYPE_VOIDP],
     System_GetFileUsage: Array.new(4, TYPE_VOIDP),
@@ -375,7 +375,7 @@ module FMOD
     System_GetOutputHandle: [TYPE_VOIDP, TYPE_VOIDP],
     System_GetPluginHandle: [TYPE_VOIDP, TYPE_INT, TYPE_INT, TYPE_VOIDP],
     System_GetPluginInfo: [TYPE_VOIDP, TYPE_INT, TYPE_VOIDP, TYPE_VOIDP, TYPE_INT, TYPE_VOIDP],
-    System_GetRecordDriverInfo: [TYPE_VOIDP, TYPE_INT, TYPE_VOIDP, TYPE_INT, TYPE_VOIDP] + Array.new(4, TYPE_VOIDP),
+    System_GetRecordDriverInfo: [TYPE_VOIDP, TYPE_INT, TYPE_VOIDP, TYPE_INT] + Array.new(5, TYPE_VOIDP),
     System_GetRecordNumDrivers: [TYPE_VOIDP, TYPE_VOIDP, TYPE_VOIDP],
     System_GetRecordPosition: [TYPE_VOIDP, TYPE_INT, TYPE_VOIDP],
     System_GetReverbProperties: [TYPE_VOIDP, TYPE_INT, TYPE_VOIDP],
@@ -466,7 +466,7 @@ module FMOD
   #   from. By default this will be the "./ext" folder relative to the gem
   #   installation folder.
   #
-  # @return [void]
+  # @return [true] if no errors occurred, otherwise exception will be raised.
   def self.load_library(library = nil, directory = nil)
     if library.nil?
       library =  case platform
@@ -476,10 +476,10 @@ module FMOD
       else 'fmod'  # Will probably fail...
       end
     end
-    directory ||= Dir.getwd
-    library = File.join(directory, library)
-    lib = Fiddle.dlopen(File.expand_path(library))
+    path = File.expand_path(File.join(directory || Dir.getwd, library))
+    lib = Fiddle.dlopen(path)
     import_symbols(lib)
+    true
   end
 
   # @return [Symbol] a symbol representing the operating system. Will be either
