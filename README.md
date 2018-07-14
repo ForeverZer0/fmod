@@ -1,4 +1,5 @@
-# FMOD
+# ![LOGO](https://upload.wikimedia.org/wikipedia/de/c/c9/Fmod-logo.svg)
+
 
 [![Gem Version](https://badge.fury.io/rb/fmod.svg)](https://badge.fury.io/rb/fmod) ![Documentation](https://img.shields.io/badge/Documentation-99.22%25-green.svg)
 
@@ -28,7 +29,9 @@ Supports a host of audio formats including:
 * Extended Module (.xm )
 * Windows Media Audio (Xbox 360) (.xma)
    
-FMOD is most widely known for its application in video games for sound effects, as it fully supports 3D sound, and can be found in all popular video game consoles (Sony, Microsoft, and Nintendo), as well as a large number of popular PC and mobile games. Built-in is a large collection of audio effects that can be applied to a sound, including various equalizers, advanced reverb environments, pitch-shifting, frequency, flange, chorus, and many, many more. 
+FMOD is most widely known for its application in video games for sound effects, as it fully supports 3D sound, and can be found in all popular video game consoles (Sony, Microsoft, and Nintendo), as well as a large number of popular PC and mobile games. This is not a restriction by any means, though, and it functions just as well for any audio back-end in your Ruby application, even providing the core functionality to a full-fledged audio player, as it supports such a wide array of formats.
+
+Built-in is a large collection of audio effects that can be applied to a sound, including various equalizers, advanced reverb environments, pitch-shifting, frequency, flange, chorus, and many, many more. Sound manipulation is where FMOD really shines, and places it as an industry standard on nearly all platforms.
 
 The wrapper supports callbacks for various events, such as sync-points in wave files, sound playback ending (either by user or end of data), and various other scenarios.  It additionally supports access to raw PCM data directly from the sound card, for creating visualizations or examining the sound in real-time.
 
@@ -48,7 +51,7 @@ Or install it yourself as:
 
     $ gem install fmod
 
-As of version 0.9.3, the external dependencies are no longer bundled with the gem, but are readily available [here](https://github.com/ForeverZer0/fmod/tree/master/ext) (these are the versions the gem was built against). Alternatively, you may download the external libraries directly from the [FMOD website](https://www.fmod.com/download) (free registration required). Place the platform-specific binaries within the working directory, or in directory of your choice and use `FMOD.load_library` to initialize the gem.
+As of version 0.9.3, the external dependencies are no longer bundled with the gem, but are readily available [here](https://github.com/ForeverZer0/fmod/tree/master/extras) (these are the versions the gem was built against). Alternatively, you may download the external libraries directly from the [FMOD website](https://www.fmod.com/download) (free registration required). Place the platform-specific binaries within the working directory, or in directory of your choice and use `FMOD.load_library` to initialize the gem.
 
 ## Usage
 
