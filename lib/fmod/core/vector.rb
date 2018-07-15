@@ -27,7 +27,7 @@ module FMOD
       #   @param y [Float] The Y coordinate in 3D space.
       #   @param z [Float] The Z coordinate in 3D space.
       def initialize(*args)
-        address ||= args.size == 1 ? args.first : nil
+        address = args[0] if args.size <= 1
         members = [:x, :y, :z]
         types = Array.new(3, TYPE_FLOAT)
         super(address, types, members)

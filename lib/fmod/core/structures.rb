@@ -4,6 +4,10 @@ module FMOD
   module Core
 
     ##
+    #
+    ListenerAttributes = Struct.new(:position, :velocity, :forward, :up)
+
+    ##
     # Describes the loop points for the channel.
     # @attr start [Integer] The  loop start point, this point in time is played
     #   so it is inclusive.

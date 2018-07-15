@@ -95,6 +95,7 @@ module FMOD
       super
       @rolloff_callbacks = []
       sig = [TYPE_VOIDP, TYPE_FLOAT]
+      # noinspection RubyResolve
       abi = FMOD::ABI
       cb = Closure::BlockCaller.new(TYPE_FLOAT, sig, abi) do |channel, distance|
         unless @rolloff_callbacks.empty?
@@ -698,6 +699,60 @@ module FMOD
     def rolloff_scale=(scale)
       FMOD.invoke(:System_Set3DSettings, self, doppler_scale,
                   distance_factor, scale)
+    end
+
+    ##
+    # @return [ListenerAttributes] the position, velocity and orientation of the
+    #   specified 3D sound listener.
+    #
+    # @param id [Integer] Listener ID in a multi-listener environment. Specify
+    #   0 if there is only 1 listener.
+    #
+    # @since 0.9.5
+    def get_listener_attributes(id)
+      args = (0..3).map { FMOD::Core::Vector.new(nil) }
+      FMOD.invoke(:System_Get3DListenerAttributes, self, id, *args)
+      ListenerAttributes.new(*args)
+    end
+
+    ##
+    # Updates the position, velocity and orientation of the specified 3D sound
+    # listener.
+    #
+    # @overload set_listener_attributes(id, attributes)
+    #   @param id [Integer] Listener ID in a multi-listener environment. Specify
+    #     0 if there is only 1 listener.
+    #   @param attributes [ListenerAttributes]
+    #
+    # @overload set_listener_attributes(id, position, velocity, forward, up)
+    #   @param id [Integer] Listener ID in a multi-listener environment. Specify
+    #     0 if there is only 1 listener.
+    #   @param position [Vector, nil] The position of the listener in world
+    #     space, measured in distance units. You can specify +nil+ to not update
+    #     the position.
+    #   @param velocity [Vector, nil] The velocity of the listener measured in
+    #     distance units *per second*. You can specify +nil+ to not update the
+    #     velocity of the listener.
+    #   @param forward [Vector, nil] The forwards orientation of the listener.
+    #     This vector must be of unit length and perpendicular to the up vector.
+    #     You can specify +nil+ to not update the forwards orientation of the listener.
+    #   @param up [Vector, nil] The upwards orientation of the listener. This
+    #     vector must be of unit length and perpendicular to the forwards
+    #     vector. You can specify +nil+ to not update the upwards orientation of
+    #     the listener.
+    #
+    # @return [void]
+    #
+    # @since 0.9.5
+    def set_listener_attributes(id, *args)
+      if args.size == 1 && FMOD.type?(args[0], ListenerAttributes)
+        args = args[0].values
+      end
+      unless args.size == 4
+        raise ArgumentError, "wrong number of arguments (#{args.size} for 2, 5)"
+      end
+      args.each { |arg| FMOD.type?(arg, Vector) unless arg.nil? }
+      FMOD.invoke(:System_Set3DListenerAttributes, self, id, *args)
     end
 
     ##
