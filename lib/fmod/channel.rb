@@ -73,7 +73,7 @@ module FMOD
     # @return [Integer] the current playback position.
     def position(unit = TimeUnit::MS)
       buffer = "\0" * SIZEOF_INT
-      FMOD.invoke(:Channel_SetPosition, self, buffer, unit)
+      FMOD.invoke(:Channel_GetPosition, self, buffer, unit)
       buffer.unpack1('L')
     end
 
